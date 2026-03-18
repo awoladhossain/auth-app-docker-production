@@ -1,0 +1,50 @@
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - auth-net
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: auth-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - auth-net
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: auth-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - auth-net
+    restart: on-failure
+
+volumes:
+  mongodb_data:
+
+networks:
+  auth-net:
+    driver: bridge
