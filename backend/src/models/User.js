@@ -24,11 +24,15 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Save করার আগে password hash করো
-UserSchema.pre("save", async function (next) {
+// ✅ আধুনিক Mongoose (Async/Await) পদ্ধতি:
+UserSchema.pre("save", async function () {
   // password change না হলে skip করো
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) return;
+
+  // Hash the password
   this.password = await bcrypt.hash(this.password, 12);
-  next();
+
+  // এখানে আলাদা করে next() কল করার দরকার নেই যদি ফাংশনটি async হয়
 });
 
 // Password compare করার method
