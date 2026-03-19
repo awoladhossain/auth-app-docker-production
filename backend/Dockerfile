@@ -3,12 +3,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-
 FROM node:20-alpine AS production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN addgroup -s appgroup && adduser -S appuser -G appgroup
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 EXPOSE 5000
-CMD [ "node", "src/server.js" ]
+CMD ["node", "src/server.js"]
