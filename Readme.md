@@ -553,12 +553,19 @@ npm run lint       # Run ESLint
 
 ### **Docker**
 ```bash
-docker compose -f docker-compose.dev.yml up --build    # Dev mode
-docker-compose up --build                       # Production mode
-docker-compose ps                               # List containers
-docker-compose logs backend                     # View backend logs
-docker-compose down                             # Stop containers
-docker-compose down -v                          # Stop + remove volumes
+docker compose -f docker-compose.dev.yml up --build    # ইমেজ বিল্ড করে কন্টেইনার চালু করা
+docker compose -f docker-compose.dev.yml up -d         # ব্যাকগ্রাউন্ডে (Detached) চালানো
+docker compose -f docker-compose.dev.yml logs -f       # রিয়েল-টাইম লগ দেখা (সব সার্ভিসের)
+docker compose -f docker-compose.dev.yml down          # কন্টেইনার ও নেটওয়ার্ক বন্ধ করা
+
+docker compose up --build -d        # প্রোডাকশন ইমেজ বিল্ড করে ব্যাকগ্রাউন্ডে চালানো
+docker compose logs -f backend      # শুধুমাত্র ব্যাকএন্ড সার্ভিসের লগ দেখা
+docker compose down                 # প্রোডাকশন কন্টেইনারগুলো স্টপ করা
+docker compose down -v              # স্টপ করা + ডাটাবেস ভলিউম (Data) পার্মানেন্টলি ডিলিট করা
+
+docker compose ps                   # বর্তমানে কোন কোন কন্টেইনার রানিং আছে দেখা
+docker stats                        # কন্টেইনারগুলো কতটুকু RAM/CPU খাচ্ছে তা দেখা (সিনিয়র টিপস!)
+docker exec -it auth-backend sh     # রানিং কন্টেইনারের ভেতরে ঢুকে ফাইল চেক করা
 ```
 
 ---
