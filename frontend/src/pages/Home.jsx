@@ -29,7 +29,7 @@ export default function Home() {
       <div style={styles.card}>
         <h1 style={styles.title}>🏠 Home Page</h1>
         <p style={styles.subtitle}>
-          এটা Private Route — শুধু logged in user দেখতে পারবে
+          এটা Private Route, শুধু logged in user দেখতে পারবে
         </p>
 
         <div style={styles.infoBox}>

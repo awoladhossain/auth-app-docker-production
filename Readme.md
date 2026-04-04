@@ -553,7 +553,7 @@ npm run lint       # Run ESLint
 
 ### **Docker**
 ```bash
-docker-compose -f docker-compose.dev.yml up     # Dev mode
+docker compose -f docker-compose.dev.yml up --build    # Dev mode
 docker-compose up --build                       # Production mode
 docker-compose ps                               # List containers
 docker-compose logs backend                     # View backend logs
