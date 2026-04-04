@@ -9,7 +9,6 @@ services:
     networks:
       - auth-net
     restart: unless-stopped
-
   backend:
     build:
       context: ./backend
