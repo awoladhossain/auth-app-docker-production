@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.DOCKERUSER}}
           password: ${{ secrets.DOCKERTOKEN}}
 
-      - name: Build and Push Backend Image
+      - name: Build and push backend
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -30,3 +30,26 @@ jobs:
           tags: |
             ${{ secrets.DOCKERUSER }}/auth-backend:latest
             ${{ secrets.DOCKERUSER }}/auth-backend:${{ github.sha }}
+
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERUSER}}
+          password: ${{ secrets.DOCKERTOKEN}}
+
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERUSER }}/auth-frontend:latest
+            ${{ secrets.DOCKERUSER }}/auth-frontend:${{ github.sha }}
