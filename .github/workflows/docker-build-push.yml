@@ -1,55 +1,35 @@
-name: Build and Push Docker Images
+name: CI/CD to Docker Hub
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  build-backend:
+  build-and-push:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERUSER}}
-          password: ${{ secrets.DOCKERTOKEN}}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push backend
+      - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: |
-            ${{ secrets.DOCKERUSER }}/auth-backend:latest
-            ${{ secrets.DOCKERUSER }}/auth-backend:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME}}/auth-backend:latest
 
-  build-frontend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERUSER}}
-          password: ${{ secrets.DOCKERTOKEN}}
-
-      - name: Build and push frontend
+      - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: |
-            ${{ secrets.DOCKERUSER }}/auth-frontend:latest
-            ${{ secrets.DOCKERUSER }}/auth-frontend:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME}}/auth-frontend:latest
